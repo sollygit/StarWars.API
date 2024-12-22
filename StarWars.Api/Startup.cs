@@ -53,15 +53,15 @@ namespace StarWars.Api
             services.AddMemoryCache();
 
             // Use SQL Server DB
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration["ConnectionStrings:DefaultConnection"],
-            //        b => b.MigrationsAssembly("StarWars.API")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration["ConnectionStrings:DefaultConnection"],
+                    b => b.MigrationsAssembly("StarWars.API")));
 
             // Use InMemoryDatabase
-            services.AddDbContext<ApplicationDbContext>(o => {
-                o.UseInMemoryDatabase("Movies");
-            });
+            //services.AddDbContext<ApplicationDbContext>(o => {
+            //    o.UseInMemoryDatabase("Movies");
+            //});
 
             services.AddSingleton(provider => settings.Get<WebJetSettings>());
             services.AddTransient<IMoviesRepository, MovieRepository>();
