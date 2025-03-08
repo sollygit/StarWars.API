@@ -17,64 +17,65 @@ namespace StarWars.Api.Services
 {
     public class WebJetService : IWebJetService
     {
-        private readonly ILogger<WebJetService> logger;
-        private readonly IMemoryCache cache;
-        private readonly WebJetSettings settings;
-        private readonly HttpClient httpClient;
+        private readonly ILogger<WebJetService> _logger;
+        private readonly IMemoryCache _cache;
+        private readonly WebJetSettings _settings;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public WebJetService(
             ILogger<WebJetService> logger,
             IMemoryCache cache,
             WebJetSettings settings,
-            HttpClient httpClient)
+            IHttpClientFactory httpClientFactory)
         {
-            this.logger = logger;
-            this.cache = cache;
-            this.settings = settings;
-            this.httpClient = httpClient;
+            _logger = logger;
+            _cache = cache;
+            _settings = settings;
+            _httpClientFactory = httpClientFactory;
         }
 
         public Task<MovieView[]> GetAll(string provider)
         {
             // Cache results per provider
-            return cache.GetOrCreateAsync(provider, async entry => {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(settings.Cache);
+            return _cache.GetOrCreateAsync(provider, async entry => {
+                entry.SlidingExpiration = TimeSpan.FromMinutes(_settings.Cache);
                 return await GetAllAsync(provider);
             });
         }
 
         private async Task<MovieView[]> GetAllAsync(string provider)
         {
-            // Inject header token
-            var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movies");
-            var response = await httpClient.GetAsync(uriBuilder.Uri);
+            var httpClient = _httpClientFactory.CreateClient("WebJetClient");
+            var response = await httpClient.GetAsync($"{provider}/movies");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Something went wrong: {response.StatusCode}");
+                throw new ServiceException(response.StatusCode, $"GetAllAsync StatusCode: {response.StatusCode}");
+            }
+
             var jObject = JObject.Parse(await response.Content.ReadAsStringAsync());
             var movies = ((JArray)jObject["Movies"]).Select(o => {
                 var movie = JsonConvert.DeserializeObject<Movie>(o.ToString());
                 return Mapper.Map<MovieView>(movie);
             });
 
-            if (!response.IsSuccessStatusCode)
-            {
-                logger.LogError($"Something went wrong: {response.StatusCode}");
-                throw new ServiceException(response.StatusCode, $"Get Movies failed for provider {provider}");
-            }
-
             return movies.ToArray();
         }
 
         public async Task<MovieRatingView> Get(string provider, string id)
         {
-            var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movie/{id}");
-            var response = await httpClient.GetAsync(uriBuilder.Uri);
-            var result = response.Content.ReadAsStringAsync().Result;
-            var movieRating = JsonConvert.DeserializeObject<MovieRatingView>(result);
+            var httpClient = _httpClientFactory.CreateClient("WebJetClient");
+            var response = await httpClient.GetAsync($"{provider}/movie/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
-                logger.LogError($"Something went wrong: {response.StatusCode}");
-                throw new ServiceException(response.StatusCode, $"Get movie failed for provider {provider} and id {id}");
+                _logger.LogError($"Something went wrong: {response.StatusCode}");
+                throw new ServiceException(response.StatusCode, $"Get StatusCode: {response.StatusCode}");
             }
+
+            var result = response.Content.ReadAsStringAsync().Result;
+            var movieRating = JsonConvert.DeserializeObject<MovieRatingView>(result);
 
             return movieRating;
         }

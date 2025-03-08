@@ -67,7 +67,8 @@ namespace StarWars.Api
             services.AddTransient<IMoviesRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IWebJetService, WebJetService>();
-            services.AddHttpClient<IWebJetService, WebJetService>(client => {
+            services.AddHttpClient("WebJetClient", client => {
+                client.BaseAddress = new Uri(settings["BaseUrl"]);
                 client.DefaultRequestHeaders.Add("x-access-token", settings["AccessToken"]);
             })
             .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Set lifetime to five minutes
