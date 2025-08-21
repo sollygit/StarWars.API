@@ -13,7 +13,6 @@ namespace StarWars.Api
                 .ForMember(o => o.ID, map => map.MapFrom(o => o.ID))
                 .ForMember(o => o.Title, map => map.MapFrom(o => o.Title))
                 .ForMember(o => o.Year, map => map.MapFrom(o => o.Year))
-                .ForMember(o => o.Type, map => map.MapFrom(o => o.Type))
                 .ForMember(o => o.Poster, map => map.MapFrom(o => o.Poster))
                 .ForMember(o => o.Price, map => map.MapFrom(o => GetRandomPrice(o.Price)))
                 .ReverseMap();

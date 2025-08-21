@@ -11,8 +11,6 @@ namespace StarWars.Repository.Configuration
             builder.HasKey(m => m.ID).HasName("PK_MovieRating");
             builder.Property(m => m.ID).IsRequired().HasDefaultValueSql("NEWID()");
             builder.Property(m => m.MovieID).IsRequired();
-            builder.Property(m => m.Price).HasColumnType("decimal(18,2)");
-            builder.Property(m => m.Votes).IsRequired().HasMaxLength(100);
             builder.Property(m => m.Rating).HasColumnType("decimal(18,2)");
             builder.ToTable("MovieRating");
         }

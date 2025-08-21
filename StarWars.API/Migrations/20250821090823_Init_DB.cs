@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace StarWars.Api.Migrations
+namespace StarWars.API.Migrations
 {
     /// <inheritdoc />
     public partial class Init_DB : Migration
@@ -15,10 +15,9 @@ namespace StarWars.Api.Migrations
                 name: "Movie",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Year = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Year = table.Column<int>(type: "int", nullable: false),
                     Poster = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -35,20 +34,15 @@ namespace StarWars.Api.Migrations
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    MovieID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Rated = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Released = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Runtime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Genre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Director = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Writer = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Language = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Awards = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    MovieID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Rated = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Released = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Runtime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Director = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Metascore = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Votes = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },

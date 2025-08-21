@@ -41,7 +41,7 @@ namespace StarWars.Common
             {
                 var id = GenerateUniqueCode(9, alphabet);
                 var title = GenerateMovieTitle();
-                var year = faker.Date.Past(20).Year.ToString();
+                var year = faker.Date.Past(20).Year;
                 var posterUrl = faker.Image.PicsumUrl();
                 var price = faker.Finance.Amount(5, 1000, 2);    
 
