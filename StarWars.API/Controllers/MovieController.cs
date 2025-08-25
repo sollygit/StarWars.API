@@ -67,5 +67,18 @@ namespace StarWars.Api.Controllers
             
             return new OkObjectResult(item);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] string id)
+        {
+            var item = await service.Get(id);
+            if (item == null) return new NotFoundObjectResult(id);
+
+            item = await service.Delete(id);
+
+            if (item == null) return new BadRequestObjectResult($"ID '{id}' could not be deleted");
+
+            return new OkObjectResult(item);
+        }
     }
 }
