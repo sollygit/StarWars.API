@@ -28,8 +28,8 @@ namespace StarWars.Api.Controllers
             return new OkObjectResult(items);
         }
 
-        [HttpGet("protected")]
         [Authorize]
+        [HttpGet("protected")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AllProtectedAsync()
@@ -38,8 +38,8 @@ namespace StarWars.Api.Controllers
             return new OkObjectResult(items);
         }
 
-        [HttpGet("secured")]
         [Authorize("read:messages")]
+        [HttpGet("secured")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -58,16 +58,18 @@ namespace StarWars.Api.Controllers
             return new OkObjectResult(item);
         }
 
+        [Authorize]
         [HttpPost()]
         public async Task<IActionResult> Create([FromBody] MovieView movieView)
         {
             var movie = Mapper.Map<Movie>(movieView);
             var item = await service.Create(movie);
-            if (item == null) return new BadRequestObjectResult($"ID '{movieView.ID}' already exists in DB");
+            if (item == null) return new BadRequestObjectResult($"Movie with ID '{movieView.ID}' already exists in DB");
             
             return new OkObjectResult(item);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] string id)
         {
@@ -76,7 +78,7 @@ namespace StarWars.Api.Controllers
 
             item = await service.Delete(id);
 
-            if (item == null) return new BadRequestObjectResult($"ID '{id}' could not be deleted");
+            if (item == null) return new BadRequestObjectResult($"Movie with ID '{id}' could not be deleted");
 
             return new OkObjectResult(item);
         }
