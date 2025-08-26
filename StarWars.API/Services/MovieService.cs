@@ -39,6 +39,12 @@ namespace StarWars.Api.Services
             return Mapper.Map<MovieView>(item);
         }
 
+        public async Task<MovieView> Update(string id, Movie movie)
+        {
+            var item = await repo.Update(id, movie);
+            return Mapper.Map<MovieView>(item);
+        }
+
         public async Task<MovieView> Delete(string id)
         {
             var item = await repo.Delete(id);

@@ -9,6 +9,7 @@ namespace StarWars.Interface
         Task<MovieView[]> All();
         Task<MovieView> Get(string id);
         Task<MovieView> Create(Movie movie);
+        Task<MovieView> Update(string id, Movie movie);
         Task<MovieView> Delete(string id);
     }
 }
