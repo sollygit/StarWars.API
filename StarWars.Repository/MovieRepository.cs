@@ -1,16 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StarWars.Interface;
 using StarWars.Model;
 
 namespace StarWars.Repository
 {
     public interface IMoviesRepository : IRepository<Movie>
     {
-        Task<IEnumerable<Movie>> All();
-        Task<Movie> GetByID(string id);
-        Task<Movie> Create(Movie movie);
-        Task<Movie> Update(string id, Movie movie);
-        Task<Movie> Delete(string id);
+        Task<IEnumerable<Movie>> AllAsync();
+        Task<Movie> GetByIdAsync(string id);
+        Task<Movie> CreateAsync(Movie movie);
+        Task<Movie> UpdateAsync(string id, Movie movie);
+        Task<Movie> DeleteAsync(string id);
     }
 
     public class MovieRepository : BaseRepository<Movie>, IMoviesRepository
@@ -22,7 +21,7 @@ namespace StarWars.Repository
             _dbContext = context;
         }
 
-        public async Task<IEnumerable<Movie>> All()
+        public async Task<IEnumerable<Movie>> AllAsync()
         {
             return await _dbContext.Movies
                 .Include(p => p.MovieRatings)
@@ -30,14 +29,14 @@ namespace StarWars.Repository
                 .ToListAsync();
         }
 
-        public async Task<Movie> GetByID(string id)
+        public async Task<Movie> GetByIdAsync(string id)
         {
             return await _dbContext.Movies
                 .Include(m => m.MovieRatings)
                 .SingleOrDefaultAsync(m => m.ID == id);
         }
 
-        public async Task<Movie> Create(Movie movie)
+        public async Task<Movie> CreateAsync(Movie movie)
         {
             if (_dbContext.Movies.Any(m => m.ID == movie.ID)) return null;
 
@@ -46,7 +45,7 @@ namespace StarWars.Repository
             return entry.Entity;
         }
 
-        public async Task<Movie> Update(string id, Movie entity)
+        public async Task<Movie> UpdateAsync(string id, Movie entity)
         {
             var movie = _dbContext.Movies.Include(p => p.MovieRatings).Single(p => p.ID == id);
             var movieRatings = movie.MovieRatings;
@@ -82,7 +81,7 @@ namespace StarWars.Repository
             return movie;
         }
 
-        public async Task<Movie> Delete(string id)
+        public async Task<Movie> DeleteAsync(string id)
         {
             var item = _dbContext.Movies.Single(o => o.ID == id);
             var entry = _dbContext.Remove(item);

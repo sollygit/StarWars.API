@@ -10,7 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarWars.Common\StarWars.Common.csproj" />
-    <ProjectReference Include="..\StarWars.Interface\StarWars.Interface.csproj" />
   </ItemGroup>
 
 </Project>

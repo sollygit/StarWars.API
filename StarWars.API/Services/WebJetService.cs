@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StarWars.Api.Settings;
 using StarWars.Common;
-using StarWars.Interface;
 using StarWars.Model;
 using StarWars.Model.ViewModels;
 using System;
@@ -16,6 +15,12 @@ using System.Threading.Tasks;
 
 namespace StarWars.Api.Services
 {
+    public interface IWebJetService
+    {
+        Task<MovieView[]> GetAllAsync(string provider);
+        Task<MovieRatingView> GetAsync(string provider, string id);
+    }
+
     public class WebJetService : IWebJetService
     {
         private readonly ILogger<WebJetService> _logger;
@@ -35,16 +40,33 @@ namespace StarWars.Api.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public Task<MovieView[]> GetAll(string provider)
+        public Task<MovieView[]> GetAllAsync(string provider)
         {
             // Cache results per provider
-            return _cache.GetOrCreateAsync(provider, async entry => {
+            return _cache.GetOrCreateAsync(provider, (Func<ICacheEntry, Task<MovieView[]>>)(async entry => {
                 entry.SlidingExpiration = TimeSpan.FromMinutes(_settings.Value.Cache);
-                return await GetAllAsync(provider);
-            });
+                return await CacheAllAsync(provider);
+            }));
         }
 
-        private async Task<MovieView[]> GetAllAsync(string provider)
+        public async Task<MovieRatingView> GetAsync(string provider, string id)
+        {
+            var httpClient = _httpClientFactory.CreateClient("WebJetClient");
+            var response = await httpClient.GetAsync($"{provider}/movie/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Something went wrong: {response.StatusCode}");
+                throw new ServiceException(response.StatusCode, $"Get StatusCode: {response.StatusCode}");
+            }
+
+            var result = response.Content.ReadAsStringAsync().Result;
+            var movieRating = JsonConvert.DeserializeObject<MovieRatingView>(result);
+
+            return movieRating;
+        }
+
+        private async Task<MovieView[]> CacheAllAsync(string provider)
         {
             var httpClient = _httpClientFactory.CreateClient("WebJetClient");
             var response = await httpClient.GetAsync($"{provider}/movies");
@@ -62,23 +84,6 @@ namespace StarWars.Api.Services
             });
 
             return movies.ToArray();
-        }
-
-        public async Task<MovieRatingView> Get(string provider, string id)
-        {
-            var httpClient = _httpClientFactory.CreateClient("WebJetClient");
-            var response = await httpClient.GetAsync($"{provider}/movie/{id}");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError($"Something went wrong: {response.StatusCode}");
-                throw new ServiceException(response.StatusCode, $"Get StatusCode: {response.StatusCode}");
-            }
-
-            var result = response.Content.ReadAsStringAsync().Result;
-            var movieRating = JsonConvert.DeserializeObject<MovieRatingView>(result);
-
-            return movieRating;
         }
     }
 }

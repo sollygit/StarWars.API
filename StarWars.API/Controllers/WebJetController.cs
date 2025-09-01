@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StarWars.Interface;
+using StarWars.Api.Services;
 using System.Threading.Tasks;
 
 namespace StarWars.Api.Controllers
@@ -8,26 +8,26 @@ namespace StarWars.Api.Controllers
     [Route("api/[controller]")]
     public class WebJetController : ControllerBase
     {
-        private readonly IWebJetService service;
+        private readonly IWebJetService _webJetService;
 
-        public WebJetController(IWebJetService service)
+        public WebJetController(IWebJetService webJetService)
         {
-            this.service = service;
+            _webJetService = webJetService;
         }
 
         [HttpGet("{provider}")]
-        public async Task<IActionResult> GetAll([FromRoute] string provider)
+        public async Task<IActionResult> GetAllAsync([FromRoute] string provider)
         {
             if (string.IsNullOrEmpty(provider))
                 return BadRequest("Provider is required");
 
-            var items = await service.GetAll(provider);
+            var items = await _webJetService.GetAllAsync(provider);
 
             return new OkObjectResult(items);
         }
 
         [HttpGet("{provider}/{id}")]
-        public async Task<IActionResult> Get([FromRoute] string provider, [FromRoute] string id)
+        public async Task<IActionResult> GetAsync([FromRoute] string provider, [FromRoute] string id)
         {
             if (string.IsNullOrEmpty(provider))
                 return BadRequest("Provider is required");
@@ -35,7 +35,7 @@ namespace StarWars.Api.Controllers
             if (string.IsNullOrEmpty(id))
                 return BadRequest("Movie ID is required");
 
-            var item = await service.Get(provider, id);
+            var item = await _webJetService.GetAsync(provider, id);
 
             return new OkObjectResult(item);
         }

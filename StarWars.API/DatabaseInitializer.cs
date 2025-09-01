@@ -53,7 +53,7 @@ namespace StarWars.Api
                 var items = JsonSerializer.Deserialize<IEnumerable<Movie>>(json, _jsonOptions) ?? [];
 
                 await _context.Movies.AddRangeAsync(items);
-                _logger.LogInformation("Seeded {Count} items successfully!", items.Count());
+                _logger.LogDebug("Seeded {Count} items successfully!", items.Count());
             }
         }
     }

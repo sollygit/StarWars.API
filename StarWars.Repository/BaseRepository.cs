@@ -1,9 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StarWars.Interface;
 using System.Linq.Expressions;
 
 namespace StarWars.Repository
 {
+    public interface IRepository<T> where T : class
+    {
+        void Add(T entity);
+        void AddRange(IEnumerable<T> entities);
+        void Update(T entity);
+        void UpdateRange(IEnumerable<T> entities);
+        void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entities);
+        int Count();
+        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
+        T GetSingleOrDefault(Expression<Func<T, bool>> predicate);
+        T Get(string id);
+        IEnumerable<T> GetAll();
+    }
+
     public abstract class BaseRepository<T> : IRepository<T> where T : class
     {
         protected readonly DbContext _context;

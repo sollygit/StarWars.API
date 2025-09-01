@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Polly;
@@ -17,7 +16,8 @@ using Polly.Retry;
 using StarWars.Api.Authorization;
 using StarWars.Api.Services;
 using StarWars.Api.Settings;
-using StarWars.Interface;
+using StarWars.API.Middleware;
+using StarWars.API.Services;
 using StarWars.Model.ViewModels;
 using StarWars.Repository;
 using System;
@@ -74,6 +74,7 @@ namespace StarWars.Api
             var webJetSettings = builder.Configuration.GetSection("WebJetSettings");
 
             builder.Services.Configure<WebJetSettings>(webJetSettings);
+            builder.Services.AddSingleton<IOrderService, OrderService>();
             builder.Services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
             builder.Services.AddTransient<IMoviesRepository, MovieRepository>();
             builder.Services.AddScoped<IMovieService, MovieService>();
@@ -89,7 +90,10 @@ namespace StarWars.Api
             builder.Services
                 .AddRouting(o => o.LowercaseUrls = true)
                 .AddControllers()
-                .AddJsonOptions(o => o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                });
 
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddFluentValidationClientsideAdapters();
@@ -100,6 +104,16 @@ namespace StarWars.Api
             });
 
             var app = builder.Build();
+
+            app.UseMiddleware<CorrelationIdMiddleware>();
+
+            // Load and cache orders at startup
+            using (var scope = app.Services.CreateScope())
+            {
+                var orderService = scope.ServiceProvider.GetRequiredService<IOrderService>();
+                var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+                await orderService.CacheOrdersAsync(env.ContentRootPath);
+            }
 
             // DB seeding from JSON file for soft startup
             using (var scope = app.Services.CreateScope())

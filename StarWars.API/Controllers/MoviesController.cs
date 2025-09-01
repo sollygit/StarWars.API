@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StarWars.Interface;
+using StarWars.Api.Services;
 using StarWars.Model;
 using StarWars.Model.ViewModels;
 using System;
@@ -14,18 +14,18 @@ namespace StarWars.Api.Controllers
     [Route("api/[controller]")]
     public class MoviesController : ControllerBase
     {
-        private readonly IMovieService service;
+        private readonly IMovieService _movieService;
 
-        public MoviesController(IMovieService service)
+        public MoviesController(IMovieService movieService)
         {
-            this.service = service;
+            _movieService = movieService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> AllAsync()
         {
-            var items = await service.All();
+            var items = await _movieService.AllAsync();
             return new OkObjectResult(items);
         }
 
@@ -35,7 +35,7 @@ namespace StarWars.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AllProtectedAsync()
         {
-            var items = await service.All();
+            var items = await _movieService.AllAsync();
             return new OkObjectResult(items);
         }
 
@@ -72,9 +72,9 @@ namespace StarWars.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] string id)
+        public async Task<IActionResult> GetAsync([FromRoute] string id)
         {
-            var item = await service.Get(id);
+            var item = await _movieService.GetAsync(id);
             if (item == null) return new NotFoundObjectResult(id);
             
             return new OkObjectResult(item);
@@ -82,10 +82,10 @@ namespace StarWars.Api.Controllers
 
         [Authorize]
         [HttpPost()]
-        public async Task<IActionResult> Create([FromBody] MovieView movieView)
+        public async Task<IActionResult> CreateAsync([FromBody] MovieView movieView)
         {
             var movie = Mapper.Map<Movie>(movieView);
-            var item = await service.Create(movie);
+            var item = await _movieService.CreateAsync(movie);
             if (item == null) return new BadRequestObjectResult($"Movie with ID '{movieView.ID}' already exists in DB");
             
             return new OkObjectResult(item);
@@ -93,24 +93,24 @@ namespace StarWars.Api.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] MovieView movieView)
+        public async Task<IActionResult> UpdateAsync([FromRoute] string id, [FromBody] MovieView movieView)
         {
-            var existingItem = await service.Get(id);
+            var existingItem = await _movieService.GetAsync(id);
             if (existingItem == null) return new NotFoundObjectResult(id);
             var movie = Mapper.Map<Movie>(movieView);
-            var item = await service.Update(id, movie);
+            var item = await _movieService.UpdateAsync(id, movie);
             if (item == null) return new BadRequestObjectResult($"Movie with ID '{id}' could not be updated");
             return new OkObjectResult(item);
         }
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] string id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] string id)
         {
-            var item = await service.Get(id);
+            var item = await _movieService.GetAsync(id);
             if (item == null) return new NotFoundObjectResult(id);
 
-            item = await service.Delete(id);
+            item = await _movieService.DeleteAsync(id);
 
             if (item == null) return new BadRequestObjectResult($"Movie with ID '{id}' could not be deleted");
 

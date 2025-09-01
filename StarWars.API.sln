@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWars.Common", "StarWars
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWars.Model", "StarWars.Model\StarWars.Model.csproj", "{E2B1078A-3942-4148-A468-322935BDE2D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWars.Interface", "StarWars.Interface\StarWars.Interface.csproj", "{C5BFE477-14D5-417C-A0FF-A53CAD82710D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWars.Repository", "StarWars.Repository\StarWars.Repository.csproj", "{4458030B-A58F-430C-9548-C0F7A967D843}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWars.API", "StarWars.API\StarWars.API.csproj", "{6365F21C-B8F1-4559-B0E5-55FF85D079B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWars.UnitTesting", "StarWars.UnitTesting\StarWars.UnitTesting.csproj", "{C0C53F6C-4EBF-4F2D-B8D0-0BF20CAC36CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{E2B1078A-3942-4148-A468-322935BDE2D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2B1078A-3942-4148-A468-322935BDE2D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2B1078A-3942-4148-A468-322935BDE2D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C5BFE477-14D5-417C-A0FF-A53CAD82710D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5BFE477-14D5-417C-A0FF-A53CAD82710D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C5BFE477-14D5-417C-A0FF-A53CAD82710D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C5BFE477-14D5-417C-A0FF-A53CAD82710D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4458030B-A58F-430C-9548-C0F7A967D843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4458030B-A58F-430C-9548-C0F7A967D843}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4458030B-A58F-430C-9548-C0F7A967D843}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{6365F21C-B8F1-4559-B0E5-55FF85D079B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6365F21C-B8F1-4559-B0E5-55FF85D079B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6365F21C-B8F1-4559-B0E5-55FF85D079B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0C53F6C-4EBF-4F2D-B8D0-0BF20CAC36CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0C53F6C-4EBF-4F2D-B8D0-0BF20CAC36CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0C53F6C-4EBF-4F2D-B8D0-0BF20CAC36CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0C53F6C-4EBF-4F2D-B8D0-0BF20CAC36CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
