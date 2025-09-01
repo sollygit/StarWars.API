@@ -1,37 +1,38 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using StarWars.Api.Settings;
-using StarWars.Common;
+using Microsoft.Extensions.Options;
+using StarWars.Model;
 using StarWars.Repository;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StarWars.Api
 {
     public interface IDatabaseInitializer
     {
-        Task SeedAsync();
+        Task SeedAsync(string rootPath);
     }
 
     public class DatabaseInitializer : IDatabaseInitializer
     {
+        private readonly JsonSerializerOptions _jsonOptions;
         private readonly ApplicationDbContext _context;
-        private readonly MovieCodeSettings _settings;
         private readonly ILogger _logger;
 
-        public DatabaseInitializer(
-            ApplicationDbContext context, 
-            MovieCodeSettings settings,
-            ILogger<DatabaseInitializer> logger)
+        public DatabaseInitializer(IOptions<JsonOptions> jsonOptions, ApplicationDbContext context, ILogger<DatabaseInitializer> logger)
         {
+            _jsonOptions = jsonOptions.Value.JsonSerializerOptions;
             _context = context;
-            _settings = settings;
             _logger = logger;
         }
 
-        public async Task SeedAsync()
+        public async Task SeedAsync(string rootPath)
         {
-            await SeedItems();
+            await SeedItems(rootPath);
             await _context.SaveChangesAsync()
                 .ContinueWith(task => {
                     if (task.IsFaulted) {
@@ -42,14 +43,17 @@ namespace StarWars.Api
                 });
         }
 
-        // Seed DB with fake items for soft startup
-        private async Task SeedItems()
+        // Seed DB from JSON file for soft startup
+        private async Task SeedItems(string rootPath)
         {
             if (!await _context.Movies.AnyAsync())
             {
-                var items = MovieFaker.Generate(10, _settings.Alphabet);
+                var path = Path.Combine(rootPath, "movies.json");
+                var json = await File.ReadAllTextAsync(path);
+                var items = JsonSerializer.Deserialize<IEnumerable<Movie>>(json, _jsonOptions) ?? [];
+
                 await _context.Movies.AddRangeAsync(items);
-                _logger.LogInformation("SeedItems success");
+                _logger.LogInformation("Seeded {Count} items successfully!", items.Count());
             }
         }
     }

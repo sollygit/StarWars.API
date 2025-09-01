@@ -1,0 +1,302 @@
+[
+  {
+    "id": "QTCS2DMWB",
+    "title": "Solo: A Star Wars Story (2018)",
+    "year": "2012",
+    "poster": "https://picsum.photos/id/103/640/480",
+    "price": 783.54,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG-13",
+        "released": "2018-05-25T00:00",
+        "runtime": "135 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Ron Howard",
+        "language": "English",
+        "metascore": 62,
+        "rating": 6.9
+      },
+      {
+        "rated": "PG-13",
+        "released": "2018-05-25T00:00",
+        "runtime": "135 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Ron Howard",
+        "language": "Spanish",
+        "metascore": 62,
+        "rating": 6.8
+      }
+    ]
+  },
+  {
+    "id": "5Q9AOGKJV",
+    "title": "Star Wars: Episode I - The Phantom Menace (1999)",
+    "year": "2012",
+    "poster": "https://picsum.photos/id/32/640/480",
+    "price": 510.67,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG",
+        "released": "1999-05-19T00:00",
+        "runtime": "136 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "English",
+        "metascore": 51,
+        "rating": 6.5
+      },
+      {
+        "rated": "PG",
+        "released": "1999-05-19T00:00",
+        "runtime": "136 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "Spanish",
+        "metascore": 51,
+        "rating": 6.4
+      }
+    ]
+  },
+  {
+    "id": "EEIBJVZYA",
+    "title": "Star Wars: Episode II - Attack of the Clones (2002)",
+    "year": "2011",
+    "poster": "https://picsum.photos/id/250/640/480",
+    "price": 989.21,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG",
+        "released": "2002-05-16T00:00",
+        "runtime": "142 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "English",
+        "metascore": 54,
+        "rating": 6.6
+      },
+      {
+        "rated": "PG",
+        "released": "2002-05-16T00:00",
+        "runtime": "142 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "Spanish",
+        "metascore": 54,
+        "rating": 6.5
+      }
+    ]
+  },
+  {
+    "id": "NBLOVUXN6",
+    "title": "Star Wars: Episode III - Revenge of the Sith (2005)",
+    "year": "2022",
+    "poster": "https://picsum.photos/id/82/640/480",
+    "price": 471.31,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG-13",
+        "released": "2005-05-19T00:00",
+        "runtime": "140 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "English",
+        "metascore": 68,
+        "rating": 7.6
+      },
+      {
+        "rated": "PG-13",
+        "released": "2005-05-19T00:00",
+        "runtime": "140 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "Spanish",
+        "metascore": 68,
+        "rating": 7.5
+      }
+    ]
+  },
+  {
+    "id": "CW0076759",
+    "title": "Star Wars: Episode IV - A New Hope",
+    "year": "1977",
+    "poster": "https://picsum.photos/id/56/640/480",
+    "price": 278.0,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG",
+        "released": "1977-07-01T07:00",
+        "runtime": "121 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "Spanish",
+        "metascore": 92,
+        "rating": 8.7
+      },
+      {
+        "rated": "PG",
+        "released": "1977-07-01T07:00",
+        "runtime": "121 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "George Lucas",
+        "language": "English",
+        "metascore": 92,
+        "rating": 8.7
+      }
+    ]
+  },
+  {
+    "id": "VSDWHPO4F",
+    "title": "Star Wars: Episode IX - The Rise of Skywalker (2019)",
+    "year": "2024",
+    "poster": "https://picsum.photos/id/201/640/480",
+    "price": 793.96,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG-13",
+        "released": "2019-12-20T00:00",
+        "runtime": "142 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "J.J. Abrams",
+        "language": "English",
+        "metascore": 54,
+        "rating": 6.5
+      },
+      {
+        "rated": "PG-13",
+        "released": "2019-12-20T00:00",
+        "runtime": "142 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "J.J. Abrams",
+        "language": "Spanish",
+        "metascore": 54,
+        "rating": 6.4
+      }
+    ]
+  },
+  {
+    "id": "2INZPYK7H",
+    "title": "Star Wars: Episode V - The Empire Strikes Back (1980)",
+    "year": "2008",
+    "poster": "https://picsum.photos/id/14/640/480",
+    "price": 739.94,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG",
+        "released": "1980-05-21T00:00",
+        "runtime": "124 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Irvin Kershner",
+        "language": "English",
+        "metascore": 82,
+        "rating": 8.7
+      },
+      {
+        "rated": "PG",
+        "released": "1980-05-21T00:00",
+        "runtime": "124 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Irvin Kershner",
+        "language": "Spanish",
+        "metascore": 82,
+        "rating": 8.6
+      }
+    ]
+  },
+  {
+    "id": "4GLJ4H6HE",
+    "title": "Star Wars: Episode VI - Return of the Jedi (1983)",
+    "year": "2006",
+    "poster": "https://picsum.photos/id/20/640/480",
+    "price": 403.27,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG",
+        "released": "1983-05-25T00:00",
+        "runtime": "131 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Richard Marquand",
+        "language": "English",
+        "metascore": 58,
+        "rating": 8.3
+      },
+      {
+        "rated": "PG",
+        "released": "1983-05-25T00:00",
+        "runtime": "131 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Richard Marquand",
+        "language": "Spanish",
+        "metascore": 58,
+        "rating": 8.2
+      }
+    ]
+  },
+  {
+    "id": "RRLQEIN8L",
+    "title": "Star Wars: Episode VII - The Force Awakens (2015)",
+    "year": "2022",
+    "poster": "https://picsum.photos/id/110/640/480",
+    "price": 696.17,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG-13",
+        "released": "2015-12-18T00:00",
+        "runtime": "138 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "J.J. Abrams",
+        "language": "English",
+        "metascore": 80,
+        "rating": 7.9
+      },
+      {
+        "rated": "PG-13",
+        "released": "2015-12-18T00:00",
+        "runtime": "138 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "J.J. Abrams",
+        "language": "Spanish",
+        "metascore": 80,
+        "rating": 7.8
+      }
+    ]
+  },
+  {
+    "id": "VMUBXKQ9X",
+    "title": "Star Wars: Episode VIII - The Last Jedi (2017)",
+    "year": "2025",
+    "poster": "https://picsum.photos/id/133/640/480",
+    "price": 745.38,
+    "isActive": true,
+    "movieRatings": [
+      {
+        "rated": "PG-13",
+        "released": "2017-12-15T00:00",
+        "runtime": "152 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Rian Johnson",
+        "language": "English",
+        "metascore": 85,
+        "rating": 7.0
+      },
+      {
+        "rated": "PG-13",
+        "released": "2017-12-15T00:00",
+        "runtime": "152 min",
+        "genre": "Action,Adventure,Fantasy",
+        "director": "Rian Johnson",
+        "language": "Spanish",
+        "metascore": 85,
+        "rating": 6.9
+      }
+    ]
+  }
+]

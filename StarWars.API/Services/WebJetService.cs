@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StarWars.Api.Settings;
@@ -19,13 +20,13 @@ namespace StarWars.Api.Services
     {
         private readonly ILogger<WebJetService> _logger;
         private readonly IMemoryCache _cache;
-        private readonly WebJetSettings _settings;
+        private readonly IOptions<WebJetSettings> _settings;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public WebJetService(
             ILogger<WebJetService> logger,
             IMemoryCache cache,
-            WebJetSettings settings,
+            IOptions<WebJetSettings> settings,
             IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
@@ -38,7 +39,7 @@ namespace StarWars.Api.Services
         {
             // Cache results per provider
             return _cache.GetOrCreateAsync(provider, async entry => {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(_settings.Cache);
+                entry.SlidingExpiration = TimeSpan.FromMinutes(_settings.Value.Cache);
                 return await GetAllAsync(provider);
             });
         }
