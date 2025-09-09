@@ -53,29 +53,13 @@ namespace StarWars.Repository
             // Update the parent movie
             _dbContext.Entry(movie).CurrentValues.SetValues(entity);
 
-            // Remove or update child collection items
-            foreach (var rating in movieRatings)
-            {
-                var mvEntity = entity.MovieRatings.SingleOrDefault(o => o.MovieID == rating.MovieID);
-                if (mvEntity != null)
-                {
-                    _dbContext.Entry(rating).CurrentValues.SetValues(mvEntity);
-                }
-                else
-                {
-                    _dbContext.Remove(rating);
-                }
-            }
+            // Remove all existing movieRatings items
+            _dbContext.MovieRating.RemoveRange(movieRatings);
 
-            // Add new child collection items
-            foreach (var md in entity.MovieRatings)
-            {
-                if (movieRatings.All(o => o.MovieID != md.MovieID))
-                {
-                    _dbContext.Add(md);
-                }
-            }
+            // Add the new movieRatings items
+            movie.MovieRatings = entity.MovieRatings;
 
+            // Save changes to the database
             await _dbContext.SaveChangesAsync();
 
             return movie;
