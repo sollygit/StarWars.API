@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using StarWars.Api.Services;
 using StarWars.Model;
 using StarWars.Model.ViewModels;
-using System;
 using System.Threading.Tasks;
 
 namespace StarWars.Api.Controllers
@@ -47,29 +46,8 @@ namespace StarWars.Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> AllSecuredAsync()
         {
-            var data = await Task.FromResult(new {
-                statusCode = 200,
-                message = "This is a secured endpoint data which is only available to authenticated users",
-                timestamp = DateTime.Now,
-                path = "/api/movie/all/secured",
-                data = new[] {
-                    new {
-                        id = 1,
-                        title = "Inception",
-                        poster = "https://picsum.photos/id/102/640/480",
-                        year = 2010,
-                        price = 12.99
-                    },
-                    new {
-                        id = 2,
-                        title = "The Matrix",
-                        poster = "https://picsum.photos/id/104/640/480",
-                        year = 1999,
-                        price = 9.99
-                    }
-                }
-            });
-            return new OkObjectResult(data);
+            var items = await _movieService.AllAsync();
+            return new OkObjectResult(items);
         }
 
         [HttpGet("{id}")]
