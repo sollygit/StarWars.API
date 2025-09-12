@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace StarWars.Api.Controllers
 {
     [ApiController]
+    [ApiExplorerSettings(GroupName = "movies")]
     [Route("api/[controller]")]
     public class MoviesController : ControllerBase
     {

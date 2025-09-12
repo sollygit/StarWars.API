@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace StarWars.API.Controllers
 {
     [ApiController]
+    [ApiExplorerSettings(GroupName = "orders")]
     [Route("[controller]")]
     public class OrdersController : ControllerBase
     {

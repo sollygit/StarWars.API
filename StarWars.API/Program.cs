@@ -100,31 +100,26 @@ namespace StarWars.Api
             builder.Services.AddValidatorsFromAssemblyContaining<MovieViewValidator>(ServiceLifetime.Transient);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "StarWars API", Version = "v1" });
+                c.SwaggerDoc("movies", new OpenApiInfo { Title = "Movies API" });
+                c.SwaggerDoc("webjet", new OpenApiInfo { Title = "WebJet API" });
+                c.SwaggerDoc("orders", new OpenApiInfo { Title = "Orders API" });
             });
 
             var app = builder.Build();
 
             app.UseMiddleware<CorrelationIdMiddleware>();
 
-            // Load and cache orders at startup
-            using (var scope = app.Services.CreateScope())
-            {
-                var orderService = scope.ServiceProvider.GetRequiredService<IOrderService>();
-                var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-                await orderService.CacheOrdersAsync(env.ContentRootPath);
-            }
+            using var scope = app.Services.CreateScope();
+            var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+            var orderService = scope.ServiceProvider.GetRequiredService<IOrderService>();
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+
+            // Cache orders from JSON file for soft startup
+            await orderService.CacheOrdersAsync(env.ContentRootPath);
 
             // DB seeding from JSON file for soft startup
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-                var dbInitializer = services.GetRequiredService<IDatabaseInitializer>();
-                await dbInitializer.SeedAsync(env.ContentRootPath);
-            }
+            await dbInitializer.SeedAsync(env.ContentRootPath);
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -137,9 +132,11 @@ namespace StarWars.Api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.DocumentTitle = "Swagger - StarWars API";
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "StarWars API V1");
+                c.DocumentTitle = "StarWars API";
                 c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/swagger/movies/swagger.json", "Movies API");
+                c.SwaggerEndpoint("/swagger/webjet/swagger.json", "WebJet API");
+                c.SwaggerEndpoint("/swagger/orders/swagger.json", "Orders API");
             });
             app.UseRouting();
             app.UseAuthentication();

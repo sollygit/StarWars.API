@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 namespace StarWars.Api.Controllers
 {
     [ApiController]
+    [ApiExplorerSettings(GroupName = "webjet")]
     [Route("api/[controller]")]
     public class WebJetController : ControllerBase
     {
