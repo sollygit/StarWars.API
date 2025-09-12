@@ -2,14 +2,14 @@
   {
     "id": "QTCS2DMWB",
     "title": "Star Wars: The Rise of Skywalker (2019)",
-    "year": "2012",
+    "year": "2019",
     "poster": "https://picsum.photos/id/103/640/480",
     "price": 783.54,
     "isActive": true,
     "movieRatings": [
       {
         "rated": "PG-13",
-        "released": "2018-05-25T00:00",
+        "released": "2019-05-25T00:00",
         "runtime": "135 min",
         "genre": "Action,Adventure,Fantasy",
         "director": "Ron Howard",
@@ -19,7 +19,7 @@
       },
       {
         "rated": "PG-13",
-        "released": "2018-05-25T00:00",
+        "released": "2019-05-25T00:00",
         "runtime": "135 min",
         "genre": "Action,Adventure,Fantasy",
         "director": "Ron Howard",
