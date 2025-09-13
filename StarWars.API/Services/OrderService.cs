@@ -98,8 +98,11 @@ namespace StarWars.API.Services
             stopwatch.Stop();
 
             // Log one structured line per request with correlation ID, validated params, elapsed ms and item count
-            _logger.LogDebug($"GetAsync: {{Total}} orders in {{Duration}} ms.{Environment.NewLine}Query: {{query}}.{Environment.NewLine}CorrelationId: {{CorrelationId}}",
-                items.Count(), stopwatch.Elapsed.TotalMilliseconds, query, _httpContextAccessor.HttpContext?.Items[Constants.X_CORRELATION_ID]);
+            _logger.LogDebug("GetAsync: {CorrelationId}, {QueryParams}, {Duration} ms, {ItemCount} items.",
+                _httpContextAccessor.HttpContext?.Items[Constants.X_CORRELATION_ID],
+                query.ToString(),
+                stopwatch.Elapsed.TotalMilliseconds,
+                items.Count());
 
             return Task.FromResult(new OrderResponseView
             {
@@ -137,20 +140,20 @@ namespace StarWars.API.Services
         {
             if (query.Page <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(query.Page), query.Page, "Page must be greater than 0.");
+                throw new ArgumentOutOfRangeException($"{nameof(query)}.{nameof(query.Page)}", query.Page, "Page must be greater than 0.");
             }
             if (query.PageSize <= 0 || query.PageSize > Constants.MAX_PAGE_SIZE)
             {
-                throw new ArgumentOutOfRangeException(nameof(query.PageSize), query.PageSize, $"PageSize must be between 1 and {Constants.MAX_PAGE_SIZE}."
-);
+                throw new ArgumentOutOfRangeException($"{nameof(query)}.{nameof(query.PageSize)}", query.PageSize, $"PageSize must be between 1 and {Constants.MAX_PAGE_SIZE}.");
             }
             if (query.Sort != "createdAt" && query.Sort != "totalCents")
             {
-                throw new ArgumentException($"Invalid Sort '{query.Sort}'. Sort must be either 'createdAt' or 'totalCents'.", nameof(query.Sort));
+                throw new ArgumentException($"Invalid Sort '{query.Sort}'. Sort must be either 'createdAt' or 'totalCents'.", $"{nameof(query)}.{nameof(query.Sort)}");
+
             }
             if (query.Dir != "desc" && query.Dir != "asc")
             {
-                throw new ArgumentException($"Invalid Dir '{query.Dir}'. Dir must be either 'desc' or 'asc'.", nameof(query.Dir));
+                throw new ArgumentException($"Invalid Dir '{query.Dir}'. Dir must be either 'desc' or 'asc'.", $"{nameof(query)}.{nameof(query.Dir)}");
             }
         }
     }

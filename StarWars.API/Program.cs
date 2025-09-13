@@ -54,9 +54,8 @@ namespace StarWars.Api
                         NameClaimType = ClaimTypes.NameIdentifier
                     };
                 });
-            builder.Services.AddAuthorization(options => {
-                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", issuer)));
-            });
+            builder.Services.AddAuthorizationBuilder().AddPolicy("read:messages", 
+                policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", issuer)));
             builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
             // Auto Mapper Configurations

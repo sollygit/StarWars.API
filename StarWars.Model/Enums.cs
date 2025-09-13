@@ -1,5 +1,11 @@
 ﻿namespace StarWars.Model
 {
+    public enum Provider
+    {
+        CinemaWorld = 1,
+        FilmWorld = 2
+    }   
+
     public enum PaymentMethod
     {
         Card = 1,
