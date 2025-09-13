@@ -114,12 +114,12 @@ namespace StarWars.Api
             var orderService = scope.ServiceProvider.GetRequiredService<IOrderService>();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
 
+            // Cache orders from JSON in memory file for soft startup
+            await orderService.CacheOrdersAsync(env.ContentRootPath);
+
             if (app.Environment.IsDevelopment())
             {
-                // Cache orders from JSON file for soft startup
-                await orderService.CacheOrdersAsync(env.ContentRootPath);
-
-                // DB seeding from JSON file for soft startup
+                // Seed DB from JSON file for soft startup
                 await dbInitializer.SeedAsync(env.ContentRootPath);
 
                 app.UseSwagger();
