@@ -127,7 +127,6 @@ namespace StarWars.Api
             }
 
             app.UseCors("CorsPolicy");
-            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
