@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace StarWars.Model
 {
@@ -13,6 +13,7 @@ namespace StarWars.Model
     {
         [JsonIgnore]
         public DateTimeOffset? UpdatedOn { get; set; }
+        
         [JsonIgnore]
         public DateTimeOffset? CreatedOn { get; set; }
     }

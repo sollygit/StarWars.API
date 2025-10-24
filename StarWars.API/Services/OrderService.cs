@@ -4,7 +4,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StarWars.Model;
-using StarWars.Model.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,7 +18,7 @@ namespace StarWars.API.Services
     public interface IOrderService
     {
         Task<IEnumerable<Order>> CacheOrdersAsync(string rootPath);
-        Task<OrderResponseView> GetAsync(OrderQueryParams query, CancellationToken cancellationToken = default);
+        Task<PagedResponse<Order>> GetAsync(OrderQueryParams query, CancellationToken cancellationToken = default);
     }
 
     public class OrderService : IOrderService
@@ -59,59 +58,61 @@ namespace StarWars.API.Services
             }) ?? [];
         }
 
-        public Task<OrderResponseView> GetAsync(OrderQueryParams query, CancellationToken cancellationToken = default)
+        public async Task<PagedResponse<Order>> GetAsync(OrderQueryParams query, CancellationToken cancellationToken = default)
         {
             var stopwatch = Stopwatch.StartNew();
-
-            // Check if cancellation has been requested
+            
             cancellationToken.ThrowIfCancellationRequested();
-
-            // Validate query parameters
+            
             ValidateQueryParams(query);
 
-            // Get all orders
-            var items = _orders.AsQueryable();
+            // Start with all items
+            var items = _orders;
 
             // Apply filters
             if (!string.IsNullOrEmpty(query.PharmacyId))
                 items = items.Where(o => o.PharmacyId.Equals(query.PharmacyId, StringComparison.OrdinalIgnoreCase));
+
             if (query.Status != null && query.Status.Count > 0)
                 items = items.Where(o => query.Status.Contains(o.Status));
+
             if (query.From.HasValue)
                 items = items.Where(o => o.CreatedAt >= query.From.Value);
+
             if (query.To.HasValue)
                 items = items.Where(o => o.CreatedAt <= query.To.Value);
 
-            // Apply sorting and direction
+            // Total count
+            var total = items.Count();
+
+            // Sorting
             items = (query.Sort, query.Dir) switch
             {
                 ("createdAt", "desc") => items.OrderByDescending(o => o.CreatedAt),
                 ("createdAt", "asc") => items.OrderBy(o => o.CreatedAt),
                 ("totalCents", "desc") => items.OrderByDescending(o => o.TotalCents),
                 ("totalCents", "asc") => items.OrderBy(o => o.TotalCents),
-                _ => items.OrderByDescending(o => o.CreatedAt) // Default sort by createdAt desc
+                _ => items.OrderByDescending(o => o.CreatedAt)
             };
 
-            // Apply pagination
-            items = items.Skip((query.Page - 1) * query.PageSize).Take(query.PageSize);
+            // Pagination
+            var list = items
+                .Skip((query.Page - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToList();
 
             stopwatch.Stop();
 
-            // Log one structured line per request with correlation ID, validated params, elapsed ms and item count
             _logger.LogDebug("GetAsync: {CorrelationId}, {QueryParams}, {Duration} ms, {ItemCount} items.",
                 _httpContextAccessor.HttpContext?.Items[Constants.X_CORRELATION_ID],
                 query.ToString(),
                 stopwatch.Elapsed.TotalMilliseconds,
-                items.Count());
+                list.Count);
 
-            return Task.FromResult(new OrderResponseView
-            {
-                Items = items,
-                Page = query.Page,
-                PageSize = query.PageSize,
-                Total = items.Count()
-            });
+            // Return a Task to satisfy async signature
+            return await Task.FromResult(new PagedResponse<Order>(query.Page, query.PageSize, total, list));
         }
+
 
         private async Task<IEnumerable<Order>> LoadOrdersAsync(string rootPath)
         {

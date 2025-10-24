@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using StarWars.Api.Settings;
 using StarWars.Common;
 using StarWars.Model;
@@ -12,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StarWars.Api.Services
@@ -62,8 +61,8 @@ namespace StarWars.Api.Services
                 throw new ServiceException(response.StatusCode, $"Get StatusCode: {response.StatusCode}");
             }
 
-            var result = response.Content.ReadAsStringAsync().Result;
-            var movieRating = JsonConvert.DeserializeObject<MovieRatingView>(result);
+            var result = await response.Content.ReadAsStringAsync();
+            var movieRating = JsonSerializer.Deserialize<MovieRatingView>(result);
 
             return movieRating;
         }
@@ -79,11 +78,18 @@ namespace StarWars.Api.Services
                 throw new ServiceException(response.StatusCode, $"GetAllAsync StatusCode: {response.StatusCode}");
             }
 
-            var jObject = JObject.Parse(await response.Content.ReadAsStringAsync());
-            var movies = ((JArray)jObject["Movies"]).Select(o => {
-                var movie = JsonConvert.DeserializeObject<Movie>(o.ToString());
-                return Mapper.Map<MovieView>(movie);
-            }).ToList();
+            var jsonString = await response.Content.ReadAsStringAsync();
+            using var jsonDoc = JsonDocument.Parse(jsonString);
+            var root = jsonDoc.RootElement;
+            var moviesJson = root.GetProperty("Movies");
+
+            // Deserialize each movie and map
+            var movies = moviesJson.EnumerateArray()
+                .Select(movieElement =>
+                {
+                    return JsonSerializer.Deserialize<MovieView>(movieElement.GetRawText());
+                })
+                .ToList();
 
             _logger.LogDebug("Cached {Count} movies from {Provider}", movies.Count, provider);
 

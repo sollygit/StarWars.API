@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StarWars.API.Services;
 using StarWars.Model;
-using StarWars.Model.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -26,7 +25,7 @@ namespace StarWars.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(OrderResponseView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAsync(
             [FromQuery] string pharmacyId,
             [FromQuery] List<Status> status,
