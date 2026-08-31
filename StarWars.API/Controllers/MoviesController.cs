@@ -2,7 +2,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using StarWars.Api.Services;
 using StarWars.Model;
@@ -18,11 +17,13 @@ namespace StarWars.Api.Controllers
     {
         private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
+        private readonly IValidator<MovieView> _validator;
 
-        public MoviesController(IMovieService movieService, IMapper mapper)
+        public MoviesController(IMovieService movieService, IMapper mapper, IValidator<MovieView> validator)
         {
             _movieService = movieService;
             _mapper = mapper;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -65,10 +66,10 @@ namespace StarWars.Api.Controllers
 
         [Authorize]
         [HttpPost()]
-        public async Task<IActionResult> CreateAsync([FromBody] MovieView movieView, [FromServices] IValidator<MovieView> validator)
+        public async Task<IActionResult> CreateAsync([FromBody] MovieView movieView)
         {
-            var result = await validator.ValidateAsync(movieView);
-            if (!result.IsValid) return new BadRequestObjectResult(result.Errors);
+            var result = await _validator.ValidateAsync(movieView);
+            if (!result.IsValid) return BadRequest(result.Errors);
 
             var movie = _mapper.Map<Movie>(movieView);
             var item = await _movieService.CreateAsync(movie);
@@ -82,10 +83,14 @@ namespace StarWars.Api.Controllers
         public async Task<IActionResult> UpdateAsync([FromRoute] string id, [FromBody] MovieView movieView)
         {
             var existingItem = await _movieService.GetAsync(id);
-            if (existingItem == null) return new NotFoundObjectResult(id);
+            if (existingItem == null) return NotFound(id);
+
+            var result = await _validator.ValidateAsync(movieView);
+            if (!result.IsValid) return BadRequest(result.Errors);
+
             var movie = _mapper.Map<Movie>(movieView);
             var item = await _movieService.UpdateAsync(id, movie);
-            if (item == null) return new BadRequestObjectResult($"Movie with ID '{id}' could not be updated");
+            if (item == null) return BadRequest($"Movie with ID '{id}' could not be updated");
             return new OkObjectResult(item);
         }
 
