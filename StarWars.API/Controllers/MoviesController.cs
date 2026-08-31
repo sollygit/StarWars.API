@@ -15,10 +15,12 @@ namespace StarWars.Api.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IMovieService _movieService;
+        private readonly IMapper _mapper;
 
-        public MoviesController(IMovieService movieService)
+        public MoviesController(IMovieService movieService, IMapper mapper)
         {
             _movieService = movieService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -63,7 +65,7 @@ namespace StarWars.Api.Controllers
         [HttpPost()]
         public async Task<IActionResult> CreateAsync([FromBody] MovieView movieView)
         {
-            var movie = Mapper.Map<Movie>(movieView);
+            var movie = _mapper.Map<Movie>(movieView);
             var item = await _movieService.CreateAsync(movie);
             if (item == null) return new BadRequestObjectResult($"Movie with ID '{movieView.ID}' already exists in DB");
             
@@ -76,7 +78,7 @@ namespace StarWars.Api.Controllers
         {
             var existingItem = await _movieService.GetAsync(id);
             if (existingItem == null) return new NotFoundObjectResult(id);
-            var movie = Mapper.Map<Movie>(movieView);
+            var movie = _mapper.Map<Movie>(movieView);
             var item = await _movieService.UpdateAsync(id, movie);
             if (item == null) return new BadRequestObjectResult($"Movie with ID '{id}' could not be updated");
             return new OkObjectResult(item);

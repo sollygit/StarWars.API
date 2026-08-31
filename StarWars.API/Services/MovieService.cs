@@ -21,12 +21,14 @@ namespace StarWars.Api.Services
     public class MovieService : IMovieService
     {
         private readonly ILogger<MovieService> _logger;
+        private readonly IMapper _mapper;
         private readonly IMoviesRepository _repo;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MovieService(ILogger<MovieService> logger, IMoviesRepository repo, IHttpContextAccessor httpContextAccessor)
+        public MovieService(ILogger<MovieService> logger, IMapper mapper, IMoviesRepository repo, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
+            _mapper = mapper;
             _repo = repo;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -38,31 +40,31 @@ namespace StarWars.Api.Services
             _logger.LogDebug("Retrieved {Count} movies from the repository.", items?.Count() ?? 0);
             _logger.LogDebug("CorrelationId: {CorrelationId}", _httpContextAccessor.HttpContext?.Items[Constants.X_CORRELATION_ID]);
 
-            return Mapper.Map<MovieView[]>(items);
+            return _mapper.Map<MovieView[]>(items);
         }
 
         public async Task<MovieView> GetAsync(string id)
         {
             var item = await _repo.GetByIdAsync(id);
-            return Mapper.Map<MovieView>(item);
+            return _mapper.Map<MovieView>(item);
         }
 
         public async Task<MovieView> CreateAsync(Movie movie)
         {
             var item = await _repo.CreateAsync(movie);
-            return Mapper.Map<MovieView>(item);
+            return _mapper.Map<MovieView>(item);
         }
 
         public async Task<MovieView> UpdateAsync(string id, Movie movie)
         {
             var item = await _repo.UpdateAsync(id, movie);
-            return Mapper.Map<MovieView>(item);
+            return _mapper.Map<MovieView>(item);
         }
 
         public async Task<MovieView> DeleteAsync(string id)
         {
             var item = await _repo.DeleteAsync(id);
-            return Mapper.Map<MovieView>(item);
+            return _mapper.Map<MovieView>(item);
         }
     }
 }

@@ -1,6 +1,5 @@
 using AutoMapper;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -8,8 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Retry;
@@ -18,7 +18,7 @@ using StarWars.Api.Services;
 using StarWars.Api.Settings;
 using StarWars.API.Middleware;
 using StarWars.API.Services;
-using StarWars.Model.ViewModels;
+using StarWars.API.Validators;
 using StarWars.Repository;
 using System;
 using System.Net.Http;
@@ -59,7 +59,13 @@ namespace StarWars.Api
             builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
             // Auto Mapper Configurations
-            Mapper.Initialize(cfg => { cfg.AddProfile<AutoMapperProfile>(); });
+            builder.Services.AddAutoMapper(cfg => {
+                // cfg.LicenseKey = "YOUR_LICENSE_KEY";
+            }, typeof(AutoMapperProfile).Assembly);
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<AutoMapperProfile>();
+            }, NullLoggerFactory.Instance);
+            IMapper mapper = config.CreateMapper();
 
             // Add memory cache
             builder.Services.AddMemoryCache();
@@ -71,13 +77,15 @@ namespace StarWars.Api
                     b => b.MigrationsAssembly("StarWars.API")));
 
             var webJetSettings = builder.Configuration.GetSection("WebJetSettings");
-
+            
+            builder.Services.AddHttpContextAccessor();
             builder.Services.Configure<WebJetSettings>(webJetSettings);
-            builder.Services.AddSingleton<IOrderService, OrderService>();
-            builder.Services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
-            builder.Services.AddTransient<IMoviesRepository, MovieRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IMovieService, MovieService>();
+            builder.Services.AddScoped<IMoviesRepository, MovieRepository>();
             builder.Services.AddScoped<IWebJetService, WebJetService>();
+            builder.Services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
+
             builder.Services
                 .AddHttpClient("WebJetClient", client => {
                     client.BaseAddress = new Uri(webJetSettings["BaseUrl"]!);
@@ -94,8 +102,6 @@ namespace StarWars.Api
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 });
 
-            builder.Services.AddFluentValidationAutoValidation();
-            builder.Services.AddFluentValidationClientsideAdapters();
             builder.Services.AddValidatorsFromAssemblyContaining<MovieViewValidator>(ServiceLifetime.Transient);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c => {

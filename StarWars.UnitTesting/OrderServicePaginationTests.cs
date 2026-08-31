@@ -6,6 +6,9 @@ using Microsoft.Extensions.Options;
 using Moq;
 using StarWars.API.Services;
 using StarWars.Model;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StarWars.UnitTesting
 {
@@ -44,10 +47,11 @@ namespace StarWars.UnitTesting
             // Assert - items must be identical
             Assert.That(secondCall.Items.Count(), Is.EqualTo(firstCall.Items.Count()), "Item count mismatch");
 
-            CollectionAssert.AreEqual(
-                 firstCall.Items.Select(o => o.Id).ToList(),
-                 secondCall.Items.Select(o => o.Id).ToList(),
-                 "Pagination results differ between calls");
+            // Assert Pagination results differ between calls
+            for (int i = 0; i < firstCall.Items.Count(); i++)
+            {
+                Assert.That(secondCall.Items.ElementAt(i).Id, Is.EqualTo(firstCall.Items.ElementAt(i).Id), $"Item at index {i} differs between calls");
+            }
         }
     }
     public class TestOrderService : OrderService

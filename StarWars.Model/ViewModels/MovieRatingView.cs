@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using StarWars.Model.Converters;
+﻿using StarWars.Model.Converters;
 using System;
 using System.Text.Json.Serialization;
 
@@ -20,26 +19,5 @@ namespace StarWars.Model.ViewModels
         public int Metascore { get; set; }
         [JsonConverter(typeof(DecimalFromStringConverter))]
         public decimal Rating { get; set; }
-    }
-
-    public class MovieRatingViewValidator : AbstractValidator<MovieRatingView>
-    {
-        public MovieRatingViewValidator()
-        {
-            RuleFor(x => x.Released)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("Released date is required")
-                .Must(date => date <= DateTime.Now)
-                .WithMessage("Released date cannot be in the future");  
-            RuleFor(x => x.Metascore)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("Metascore is required");
-            RuleFor(x => x.Rating)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("Rating is required");
-        }
     }
 }

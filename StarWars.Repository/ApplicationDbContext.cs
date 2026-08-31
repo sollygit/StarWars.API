@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StarWars.Model;
 using StarWars.Repository.Configuration;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StarWars.Repository
 {
