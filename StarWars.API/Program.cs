@@ -101,7 +101,7 @@ namespace StarWars.Api
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 });
 
-            builder.Services.AddValidatorsFromAssemblyContaining<MovieViewValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<MovieValidator>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c => {
                 c.SwaggerDoc("movies", new OpenApiInfo { Title = "Movies API" });

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +16,11 @@ namespace StarWars.Api.Controllers
     {
         private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
-        private readonly IValidator<MovieView> _validator;
 
-        public MoviesController(IMovieService movieService, IMapper mapper, IValidator<MovieView> validator)
+        public MoviesController(IMovieService movieService, IMapper mapper)
         {
             _movieService = movieService;
             _mapper = mapper;
-            _validator = validator;
         }
 
         [HttpGet]
@@ -68,9 +65,6 @@ namespace StarWars.Api.Controllers
         [HttpPost()]
         public async Task<IActionResult> CreateAsync([FromBody] MovieView movieView)
         {
-            var result = await _validator.ValidateAsync(movieView);
-            if (!result.IsValid) return BadRequest(result.Errors);
-
             var movie = _mapper.Map<Movie>(movieView);
             var item = await _movieService.CreateAsync(movie);
             if (item == null) return BadRequest($"Movie with ID '{movieView.ID}' already exists in DB");
@@ -84,9 +78,6 @@ namespace StarWars.Api.Controllers
         {
             var existingItem = await _movieService.GetAsync(id);
             if (existingItem == null) return NotFound(id);
-
-            var result = await _validator.ValidateAsync(movieView);
-            if (!result.IsValid) return BadRequest(result.Errors);
 
             var movie = _mapper.Map<Movie>(movieView);
             var item = await _movieService.UpdateAsync(id, movie);

@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using StarWars.Model.ViewModels;
+using StarWars.Model;
 using System;
 
 namespace StarWars.API.Validators
 {
-    public class MovieRatingViewValidator : AbstractValidator<MovieRatingView>
+    public class MovieRatingValidator : AbstractValidator<MovieRating>
     {
-        public MovieRatingViewValidator()
+        public MovieRatingValidator()
         {
             RuleFor(x => x.Released)
                 .NotEmpty()
