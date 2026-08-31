@@ -3,7 +3,7 @@
     "id": "QTCS2DMWB",
     "title": "Star Wars: The Rise of Skywalker (2019)",
     "year": "2019",
-    "poster": "https://picsum.photos/id/103/640/480",
+    "poster": "https://loremflickr.com/640/480/starwars,the-rise-of-skywalker?lock=123",
     "price": 783.54,
     "isActive": true,
     "movieRatings": [
@@ -32,8 +32,8 @@
   {
     "id": "5Q9AOGKJV",
     "title": "Star Wars: Episode I - The Phantom Menace (1999)",
-    "year": "2012",
-    "poster": "https://picsum.photos/id/32/640/480",
+    "year": "1999",
+    "poster": "https://loremflickr.com/640/480/starwars,the-phantom-menace?lock=123",
     "price": 510.67,
     "isActive": true,
     "movieRatings": [
@@ -62,8 +62,8 @@
   {
     "id": "EEIBJVZYA",
     "title": "Star Wars: Episode II - Attack of the Clones (2002)",
-    "year": "2011",
-    "poster": "https://picsum.photos/id/250/640/480",
+    "year": "2002",
+    "poster": "https://loremflickr.com/640/480/starwars,attack-of-the-clones?lock=123",
     "price": 989.21,
     "isActive": true,
     "movieRatings": [
@@ -92,8 +92,8 @@
   {
     "id": "NBLOVUXN6",
     "title": "Star Wars: Episode III - Revenge of the Sith (2005)",
-    "year": "2022",
-    "poster": "https://picsum.photos/id/82/640/480",
+    "year": "2005",
+    "poster": "https://loremflickr.com/640/480/starwars,revenge-of-the-sith?lock=123",
     "price": 471.31,
     "isActive": true,
     "movieRatings": [
@@ -123,7 +123,7 @@
     "id": "CW0076759",
     "title": "Star Wars: Episode IV - A New Hope",
     "year": "1977",
-    "poster": "https://picsum.photos/id/56/640/480",
+    "poster": "https://loremflickr.com/640/480/starwars,episode-iv,a-new-hope?lock=123",
     "price": 278.0,
     "isActive": true,
     "movieRatings": [
@@ -152,8 +152,8 @@
   {
     "id": "VSDWHPO4F",
     "title": "Star Wars: Episode IX - The Rise of Skywalker (2019)",
-    "year": "2024",
-    "poster": "https://picsum.photos/id/201/640/480",
+    "year": "2019",
+    "poster": "https://loremflickr.com/640/480/starwars,episode-ix,the-rise-of-skywalker?lock=123",
     "price": 793.96,
     "isActive": true,
     "movieRatings": [
@@ -182,8 +182,8 @@
   {
     "id": "2INZPYK7H",
     "title": "Star Wars: Episode V - The Empire Strikes Back (1980)",
-    "year": "2008",
-    "poster": "https://picsum.photos/id/14/640/480",
+    "year": "1980",
+    "poster": "https://loremflickr.com/640/480/starwars,the-empire-strikes-back?lock=123",
     "price": 739.94,
     "isActive": true,
     "movieRatings": [
@@ -212,8 +212,8 @@
   {
     "id": "4GLJ4H6HE",
     "title": "Star Wars: Episode VI - Return of the Jedi (1983)",
-    "year": "2006",
-    "poster": "https://picsum.photos/id/20/640/480",
+    "year": "1983",
+    "poster": "https://loremflickr.com/640/480/starwars,return-of-the-jedi?lock=123",
     "price": 403.27,
     "isActive": true,
     "movieRatings": [
@@ -242,8 +242,8 @@
   {
     "id": "RRLQEIN8L",
     "title": "Star Wars: Episode VII - The Force Awakens (2015)",
-    "year": "2022",
-    "poster": "https://picsum.photos/id/110/640/480",
+    "year": "2015",
+    "poster": "https://loremflickr.com/640/480/starwars,the-force-awakens?lock=123",
     "price": 696.17,
     "isActive": true,
     "movieRatings": [
@@ -272,8 +272,8 @@
   {
     "id": "VMUBXKQ9X",
     "title": "Star Wars: Episode VIII - The Last Jedi (2017)",
-    "year": "2025",
-    "poster": "https://picsum.photos/id/133/640/480",
+    "year": "2017",
+    "poster": "https://loremflickr.com/640/480/starwars,the-last-jedi?lock=123",
     "price": 745.38,
     "isActive": true,
     "movieRatings": [
