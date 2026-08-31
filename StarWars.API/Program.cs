@@ -34,6 +34,7 @@ namespace StarWars.Api
         {
             var builder = WebApplication.CreateBuilder(args);
             var origins = builder.Configuration["CorsUrl"]!.Split(';');
+            var webJetSettings = builder.Configuration.GetSection("WebJetSettings");
 
             // Add services to the container.
             builder.Services.AddCors(options => {
@@ -60,7 +61,7 @@ namespace StarWars.Api
 
             // Auto Mapper Configurations
             builder.Services.AddAutoMapper(cfg => {
-                // cfg.LicenseKey = "YOUR_LICENSE_KEY";
+                cfg.LicenseKey = webJetSettings["AutoMapperLicenseKey"];
             }, typeof(AutoMapperProfile).Assembly);
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<AutoMapperProfile>();
@@ -75,9 +76,7 @@ namespace StarWars.Api
                 options.UseSqlServer(
                     builder.Configuration["ConnectionStrings:DefaultConnection"],
                     b => b.MigrationsAssembly("StarWars.API")));
-
-            var webJetSettings = builder.Configuration.GetSection("WebJetSettings");
-            
+           
             builder.Services.AddHttpContextAccessor();
             builder.Services.Configure<WebJetSettings>(webJetSettings);
             builder.Services.AddScoped<IOrderService, OrderService>();
